@@ -54,3 +54,37 @@ plt.scatter( train_input[:,0], train_input[:,1])                # 학습용
 plt.scatter( 25, 100 )                                          # 예측값     
 plt.scatter( train_input[indexs, 0], train_input[indexs, 1] )   # 예측에 사용된 이웃자료 # 문제 발견
 plt.show()
+
+# [10] 표준화 필요성 :< 공정하게 크기 맞추는 작업 > 길이와 무게 값의 차이가 커서 일관된 비교가 어렵다.
+# 예] 달리기 점수 80 90 70, 몸무게 40 50 100, 달리기 70~ 90 , 몸무게 40 ~ 100
+# 컴퓨터는 숫자가 더 큰걸 더 중요하게 생각함. 몸무게 크면 좋은거라고 판단
+# 몸무게 40 = -1, 몸무게 100 = 1, 몸무게 50  = 0 취급하여 비교한다.
+# 즉] 특정한 자료가 단위의 크기가 크면 큰 값이 모델을 지배하지 않도록 특정 기준으로 맞춘다. 
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler( )  # 스케일 객체 생성
+scaler.fit( train_input )   # 
+print( scaler.mean_ )       # 평균
+print( scaler.scale_ )      # 표준편차
+train_scaled = scaler.transform( train_input ) # 표준화(스케일링) , 공식 : ( 값- 평균값 ) / 표준편차
+print( train_scaled )
+
+
+# [11] 스케일링 이후 시각화, 차트 모양의 차이는 없지만 단위가 표준화 됨
+plt.scatter( train_scaled[:,0] , train_scaled[:, 1])
+plt.show()
+
+# [12] 스케일링 이후 재학습 모델 만들기
+kn.fit( train_scaled, train_target ) # 표준화된 자료로 재학습
+# 임의의 예측( 스케일링 된 )
+new = scaler.transform([ [25, 150] ])
+# 예측하기
+print( kn.predict( new ) ) #[1.] # 스케일링(표준화) 전에는 0, 이후에는 1 예측했다.
+# 예측에 사용된 이웃들 확인
+dist, indexs = kn.kneighbors( new )
+
+plt.scatter( train_scaled[:,0], train_scaled[:,1]) # 스케일링된 학습용     
+plt.scatter( new[:,0], new[:,1] )                      # 스케일링된 예측값
+plt.scatter( train_scaled[ indexs, 0 ] , train_scaled[indexs, 1] ) # 예측에 사용된 이웃자료 
+plt.show()
+
+# [9]번 차트와 [12]번 차트 비교하기 : 녹색 점 = 스케일링에 사용된 이웃들
