@@ -70,5 +70,35 @@ plt.scatter( 100, 3191 )
 plt.plot( [15, 100], lr.predict([[15], [100]]) ) # 회귀선 그리기 # 15 = (물고기 길이의)시작점, 100 길이의 끝점
 plt.show()
 
+print( lr.score( test_input, test_target )) # 단순선형평가 #0.8359630155975616
+
 # [3] ( 다항 : 여러개 항 )선형회귀 모델 # 2차 방정식
-#
+# 직선공식(1차 방정식) : Y(예측) = W(가중치) * X(특성) + B(절편)
+# 직선공식(2차 방정식) : Y(예측) = W(가중치) * X(특성)제곱 + W(가중치) * X(특성)제곱 + B(절편)
+# X(특성) 제곱 : 물고기'길이'에 제곱 *최적의 제곱 찾아서 정확도 최적화한다.
+# 가중치 : 기울기
+# x(특성) : 물고기 '길이'
+# 가중치 : 기울기
+# 절편 : y절편 / 편향
+# 즉] x제곱 항목이 추가되면서 그래프가 U 또는 곡선모양으로 나온다. 길이가 커질수록 무게는 배로 늘어나는 효과
+import numpy as np
+train_poly = np.column_stack( (train_input**2, train_input)) # +더하기 **제곱 [길이제곱, 길이]
+print( train_poly ) #[[ 784.     28.  ]
+
+lr = LinearRegression()
+lr.fit( train_poly, train_target ) # 다항으로 학습
+
+# 예측할 자료, 길이 : 50인 무게 예측
+print( lr.predict([[50**2, 50]]) ) # [1579.0440311]
+
+# 여러개 예측
+point = np.arange( 15, 50 ) # 15부터 50까지(예측하고 싶은 범위) 1씩 증가하는 리스트 반환
+point_poly = np.column_stack( (point**2, point) )   # 15 ~50 제곱한 열 , 15 ~ 50 열
+print( point_poly )
+
+# 시각화
+plt.scatter( train_input, train_target )   # 특성 자료
+plt.plot( point, lr.predict(point_poly))   # 여러개 예측 시각화
+plt.show()
+test_poly = np.column_stack( (test_input**2, test_input ) )
+print( lr.score( test_poly, test_target ) ) # 회귀 평가 # 0.9801885585527479
