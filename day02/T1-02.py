@@ -1,6 +1,6 @@
 # [1]
 import pandas as pd
-df=pd.read_csv("./day02/Fish.csv")
+df=pd.read_csv("./day01/Fish.csv")
 df.info()
 
 # [2] 필요한 어종 추출: 조건식 대신에 .isin() 특정 값만 추출, isna() 결측치만추출

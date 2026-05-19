@@ -1,6 +1,6 @@
 # [1] Fist csv 가져오기
 import pandas as pd
-df=pd.read_csv("./day02/Fish.csv")
+df=pd.read_csv("./day01/Fish.csv")
 
 # [2] Perch(농어)만 추출
 target_fish = df[ df['Species'].isin(['Perch'])]
