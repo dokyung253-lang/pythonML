@@ -101,5 +101,5 @@ from sklearn.linear_model import Lasso
 lasso = Lasso( alpha = 10 ) # 라쏘 모델 객체 생성
 lasso.fit( train_scaled, train_target ) # 라쏘 모델 학습
 print( '------------구분선-----------', 10 )
-print( lasso.score( train_scaled, train_target ) ) 
+print( lasso.score( train_scaled, train_target ) )  
 print( lasso.score( test_scaled, test_target ) ) 
