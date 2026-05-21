@@ -21,11 +21,20 @@ train_input, test_input, train_target, test_target = train_test_split(iris_lengt
 
 # [단계 3] 데이터 차원 변환 (Reshape)
 # 사이킷런 모델 학습을 위해 1차원 배열인 train_input과 test_input을 [개수, 1] 형태의 2차원 배열로 변환하세요.
+train_input = train_input.reshape( -1, 1 )
+test_input = test_input.reshape( -1, 1 )
 
 # [단계 4] 단순 선형 회귀(Linear Regression) 모델 학습 및 평가
 # 1) LinearRegression 객체를 생성하고 변환된 train_input 데이터로 모델을 학습하세요.
 # 2) 학습된 모델의 훈련 세트와 테스트 세트의 결정계수(R^2)를 각각 출력하세요.
 # 3) 모델의 기울기(coef_)와 절편(intercept_)을 각각 출력하세요.
+from sklearn.linear_model import LinearRegression
+lr = LinearRegression()
+lr.fit( train_input )
+
+print( lr.coef_ )
+print( lr.intercept_ )
+
 
 # [단계 5] 다항 회귀를 위한 데이터 전처리 (특성 추가)
 # 꽃받침 너비의 비선형적 흐름을 반영하기 위해 numpy의 column_stack을 사용하여

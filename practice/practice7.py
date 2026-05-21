@@ -29,12 +29,7 @@ lr.fit( train_scaled, train_target )
 # [단계 5] 모델 평가 및 분류 정확도(Accuracy) 확인 * 테스트 세트의 정확도가 0.95 이상이 나오도록 설정
 # [단계 6] 학습한 종속 변수 출력
 # [단계 7] 테스트 세트의 앞선 5개 샘플 데이터에 대해 모델이 예측한 클래스를 출력하세요.
-print( '모델 예측 라벨\n', lr.predict( test_scaled) )
-print( '모델 예측 확률\n',lr.predict_proba( test_scaled ) )
-print( '모델평가점수\n', lr.score( test_scaled, test_target) )
-from scipy.special import softmax
-decision = lr.decision_function( test_scaled )
-print( decision )
-print( softmax ( decision ) )
-print( np.round( softmax( decision), decimals = 3 ) )
+
+print( lr.score( test_scaled, test_target ))
 print( lr.classes_)
+print( lr.predict( test_scaled[:5]))
