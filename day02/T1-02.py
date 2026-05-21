@@ -9,7 +9,7 @@ print(target_fish)
 
 # [3] 필요한 특성 추출 : Length2, Weight
 # 넘파이 # np.column_stack(( 리스트1 ,리스트 2 )) : 두 리스트 간에 동일한 요소로 2차원리스트 구성
-# T2-01.py [6] zip 함수 대신에 2차원 리스트 구성 방법
+# T1-01.py [6] zip 함수 대신에 2차원 리스트 구성 방법
 import numpy as np
 fish_data = np.column_stack(( target_fish['Length2'], target_fish['Weight'] ))
 print( fish_data ) # [[ 길이 무게 ][ 길이 무게 ]]
