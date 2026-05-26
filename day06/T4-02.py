@@ -57,3 +57,40 @@ print( gs.best_params_ ) # {'min_impurity_decrease': 0.0003}
 # print( gs.cv_results_ ) # 기본값으로 교차검증 5가 적용됨
 
 # [5] 다중 파라미터 
+params = {
+    # 최저불순도
+    'min_impurity_decrease' : np.arange( 0.0001, 0.001, 0.0001 ), # 0.0001~ 0.001 (미만까지) 0.0001씩 증가 # 9번 
+    # 최대뿌리깊이
+    'max_depth' : range( 5, 20, 1 ), # 5~20(미만) # 1씩 증가 # 15번
+    # 노드분할시 최저샘플(데이터=Row)수 , 즉] 최저샘플수보다 작으면 노드분할 안함
+    'min_samples_split' : range( 2, 100, 10 ), # 10번
+    # 리프노트( 나머지/뿌리노트 ) 최저샘플수, 즉] 현재 리프노드가 최저샘플수보다 작으면 노드분할 안함
+    'min_samples_leaf' : range( 1, 100, 10 ) # 1~ 100미만, 10번
+}
+# cv = 교차검증수(기본값 5)
+# n_jobs= CPU 병렬처리 수행 
+gs = GridSearchCV( DecisionTreeClassifier( random_state= 42), params , n_jobs= -1, cv = 5)
+# 대략 학습 조합
+# 최저불순도( 9가지 ) * 깊이( 15가지 ) * 최저분리샘플( 10가지 ) * 최저리프샘플( 10가지 ) = 대략 13,000가지 조합 학습
+# + 교차검증(N등분) * 대략 13,000가지 조합 = 6만번의 학습 모델
+gs.fit( train_input, train_target )
+# 최적의 파라미터 조합 
+print( gs.best_params_ ) # {'max_depth': 13, 'min_impurity_decrease': np.float64(0.0001), 'min_samples_leaf': 11, 'min_samples_split': 2}
+print( gs.best_score_ ) # 0.8756162796819881
+
+# [6] 랜덤 서치 
+# 조합수가 많아지면 연산량이 많아져서 서버(컴퓨터)에 부하 발생할 수 있다
+# 랜덤서치란? 고정된 값이 아니라 '확률 분포 함수'를 제공하여 숫자를 뽑아 학습한다.
+from sklearn.model_selection import RandomizedSearchCV
+# n_iter = 100  # 정의된 조합수에서 무작위(랜덤)으로 N개의 조합만 추출하여 학습한다.
+# 대략 13,000 조합에서 100개만 무작위로 추출 # 교차검증 5 -> 500번 학습
+rs = RandomizedSearchCV( DecisionTreeClassifier( random_state=42) , params, n_iter=100, n_jobs= -1, cv=5, random_state =42)
+rs.fit(train_input, train_target )
+print( rs.best_params_)
+# {'min_samples_split': 12, 'min_samples_leaf': 11, 
+# 'min_impurity_decrease': np.float64(0.0004), 'max_depth': 17}
+print( rs.best_score_ ) # 0.8694571684304744 # 학습속도는 빨라졌지만 정확도가 조금 낮아짐
+
+# 최적의 파라미터로 예측한다
+# dt = rs.best_estimator_
+# print( dt.predict(임의의 예측할 값) )
